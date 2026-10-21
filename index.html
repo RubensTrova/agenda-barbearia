@@ -95,6 +95,19 @@ p {
 #msg-ficha { color: #b02a37; text-align: center; }
 #resultado-ficha { text-align: center; }
 .numero-ficha { font-size: 64px; font-weight: bold; color: #1f3864; margin: 5px 0; }
+
+.botao-secundario {
+  display: block;
+  width: 100%;
+  background: white;
+  color: #1f3864;
+  border: 2px solid #1f3864;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 16px;
+  margin-top: 12px;
+  cursor: pointer;
+}
   </style>
 </head>
 <body>
@@ -130,12 +143,15 @@ p {
   </div>
 
   <div id="resultado-ficha" hidden>
-    <p>Sua ficha:</p>
-    <div class="numero-ficha" id="numero-ficha"></div>
-    <p id="servico-ficha"></p>
-    <a id="link-whatsapp" class="botao-whatsapp" target="_blank">Enviar minha ficha no WhatsApp</a>
-  </div>
+  <p>Sua ficha:</p>
+  <p id="nome-ficha"></p>
+  <div class="numero-ficha" id="numero-ficha"></div>
+  <p id="servico-ficha"></p>
+  <a id="link-whatsapp" class="botao-whatsapp" target="_blank">Enviar minha ficha no WhatsApp</a>
+  <button id="btn-outra" class="botao-secundario">Novo registro</button>
 </div>
+</div>
+
   <a class="botao-whatsapp"
    href="https://wa.me/5571988144191?text=Olá!%20Tenho%20uma%20dúvida%20sobre%20a%20barbearia."
    target="_blank">
