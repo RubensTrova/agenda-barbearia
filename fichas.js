@@ -1,10 +1,10 @@
 // ===== PREENCHA ESTES DOIS VALORES =====
 const URL_FICHAS = "https://script.google.com/macros/s/AKfycbzMwr98GDVdScBJjsu7-t5nitrgxj9eBEX20K4NfoPbkQnC4CjbJrJ0oJ6SEhdu_TXTyA/exec";
-const NUMERO_WHATSAPP = "5571999999999"; // número que recebe as fichas (só dígitos)
+const NUMERO_WHATSAPP = "Digite seu telefone"; // número que recebe as fichas (só dígitos)
 // ========================================
 
 // Mude para true só para testar em dias sem barbearia
-const MODO_TESTE = false;
+const MODO_TESTE = true;
 
 function chaveHoje() {
   return "ficha-" + new Date().toLocaleDateString("pt-BR");
@@ -32,7 +32,8 @@ function mostrarResultado(dados) {
     "Olá, me chamo " + dados.nome +
     ", sou o número " + dados.numero +
     " na " + dados.servico.toLowerCase() + ".";
-
+    
+    document.getElementById("nome-ficha").textContent = dados.nome;
   document.getElementById("numero-ficha").textContent = dados.numero;
   document.getElementById("servico-ficha").textContent = dados.servico;
   document.getElementById("link-whatsapp").href =
@@ -89,6 +90,26 @@ async function pegarFicha() {
   carregarVagas();
 }
 
+function novaFicha() {
+  localStorage.removeItem(chaveHoje());
+
+  document.getElementById("f-nome").value = "";
+  document.getElementById("f-telefone").value = "";
+  document.getElementById("f-matricula").value = "";
+
+  const marcado = document.querySelector('input[name="servico"]:checked');
+  if (marcado) {
+    marcado.checked = false;
+  }
+
+  document.getElementById("msg-ficha").textContent = "";
+  document.getElementById("resultado-ficha").hidden = true;
+  document.getElementById("formulario-ficha").hidden = false;
+  document.getElementById("btn-ficha").disabled = false;
+
+  carregarVagas();
+}
+
 // ----- Início: roda quando a página abre -----
 const dataAtual = new Date();
 const abertoHoje = MODO_TESTE ||
@@ -97,6 +118,7 @@ const abertoHoje = MODO_TESTE ||
 if (abertoHoje) {
   document.getElementById("area-fichas").hidden = false;
   document.getElementById("btn-ficha").addEventListener("click", pegarFicha);
+  document.getElementById("btn-outra").addEventListener("click", novaFicha);
 
   carregarVagas();
   setInterval(carregarVagas, 30000);
