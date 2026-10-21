@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Agenda da Barbearia</title>
+  <title>Agenda da Barbearia e Manicure</title>
   <style>
     body {
   font-family: Arial, sans-serif;
@@ -55,6 +55,46 @@ p {
   background: #1ebe5b;
 
 }
+    [hidden] { display: none !important; }
+
+.cartao-fichas {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  margin: 20px auto;
+  max-width: 320px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  text-align: left;
+}
+.cartao-fichas h2 { text-align: center; margin-top: 0; }
+.cartao-fichas label { display: block; margin-top: 10px; font-size: 16px; }
+.cartao-fichas input[type="text"],
+.cartao-fichas input[type="tel"] {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  box-sizing: border-box;
+  margin-top: 4px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+.opcoes label { display: inline-block; margin-right: 15px; }
+#vagas-texto { text-align: center; font-weight: bold; font-size: 18px; }
+#btn-ficha {
+  width: 100%;
+  background: #1f3864;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 18px;
+  margin-top: 15px;
+  cursor: pointer;
+}
+#btn-ficha:disabled { background: #999; cursor: not-allowed; }
+#msg-ficha { color: #b02a37; text-align: center; }
+#resultado-ficha { text-align: center; }
+.numero-ficha { font-size: 64px; font-weight: bold; color: #1f3864; margin: 5px 0; }
   </style>
 </head>
 <body>
@@ -64,6 +104,38 @@ p {
 
   <div id="hoje" class="cartao"></div>
   <div id="amanha" class="cartao"></div>
+  <div id="area-fichas" class="cartao-fichas" hidden>
+  <h2>Pegue sua ficha</h2>
+  <p id="vagas-texto">Carregando vagas...</p>
+
+  <div id="formulario-ficha">
+    <label>Nome
+      <input type="text" id="f-nome" placeholder="Seu nome completo">
+    </label>
+    <label>Telefone com DDD
+      <input type="tel" id="f-telefone" placeholder="71 99999-9999">
+    </label>
+    <label>Matrícula
+      <input type="text" id="f-matricula" placeholder="Sua matrícula">
+    </label>
+
+    <p>Serviço (escolha um):</p>
+    <div class="opcoes">
+      <label><input type="radio" name="servico" value="Barbearia"> Barbearia</label>
+      <label><input type="radio" name="servico" value="Manicure"> Manicure</label>
+    </div>
+
+    <button id="btn-ficha">Pegar ficha</button>
+    <p id="msg-ficha"></p>
+  </div>
+
+  <div id="resultado-ficha" hidden>
+    <p>Sua ficha:</p>
+    <div class="numero-ficha" id="numero-ficha"></div>
+    <p id="servico-ficha"></p>
+    <a id="link-whatsapp" class="botao-whatsapp" target="_blank">Enviar minha ficha no WhatsApp</a>
+  </div>
+</div>
   <a class="botao-whatsapp"
    href="https://wa.me/5571988144191?text=Olá!%20Tenho%20uma%20dúvida%20sobre%20a%20barbearia."
    target="_blank">
@@ -71,5 +143,6 @@ p {
 </a>
 
   <script src="teste.js"></script>
+<script src="fichas.js"></script>
 </body>
 </html>
