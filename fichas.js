@@ -4,7 +4,7 @@ const NUMERO_WHATSAPP = "Digite seu telefone"; // número que recebe as fichas (
 // ========================================
 
 // Mude para true só para testar em dias sem barbearia
-const MODO_TESTE = true;
+const MODO_TESTE = false;
 
 function chaveHoje() {
   return "ficha-" + new Date().toLocaleDateString("pt-BR");
