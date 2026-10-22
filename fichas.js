@@ -120,8 +120,37 @@ if (abertoHoje) {
   document.getElementById("btn-ficha").addEventListener("click", pegarFicha);
   document.getElementById("btn-outra").addEventListener("click", novaFicha);
 
-  carregarVagas();
-  setInterval(carregarVagas, 30000);
+  async function carregarVagas() {
+  const texto = document.getElementById("vagas-texto");
+  try {
+    const resposta = await fetch(URL_FICHAS);
+    const dados = await resposta.json();
+    const linhas = [];
+    let totalRestante = 0;
+
+    ["Barbearia", "Manicure"].forEach(function (servico) {
+      const restantes = dados.restantes[servico];
+      totalRestante += restantes;
+
+      if (restantes > 0) {
+        linhas.push(servico + ": restam " + restantes + " de " + dados.total);
+      } else {
+        linhas.push(servico + ": fichas esgotadas");
+      }
+
+      const opcao = document.querySelector('input[name="servico"][value="' + servico + '"]');
+      opcao.disabled = restantes === 0;
+      if (restantes === 0) {
+        opcao.checked = false;
+      }
+    });
+
+    texto.innerHTML = linhas.join("<br>");
+    document.getElementById("btn-ficha").disabled = totalRestante === 0;
+  } catch (erro) {
+    texto.textContent = "Não foi possível ver as vagas agora.";
+  }
+}
 
   const salva = localStorage.getItem(chaveHoje());
   if (salva) {
