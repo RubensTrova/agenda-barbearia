@@ -1,10 +1,12 @@
 // ===== PREENCHA ESTES DOIS VALORES =====
-const URL_FICHAS = "https://script.google.com/macros/s/AKfycbzMwr98GDVdScBJjsu7-t5nitrgxj9eBEX20K4NfoPbkQnC4CjbJrJ0oJ6SEhdu_TXTyA/exec";
-const NUMERO_WHATSAPP = "5571988144191"; // número que recebe as fichas (só dígitos)
+const URL_FICHAS = "COLE_AQUI_O_SEU_URL_QUE_TERMINA_EM_/exec";
+const NUMERO_WHATSAPP = "5571988144191"; // só dígitos
 // ========================================
 
 // Mude para true só para testar em dias sem barbearia
 const MODO_TESTE = false;
+
+const SERVICOS_FICHA = ["Barbearia", "Manicure"];
 
 function chaveHoje() {
   return "ficha-" + new Date().toLocaleDateString("pt-BR");
@@ -16,12 +18,33 @@ async function carregarVagas() {
     const resposta = await fetch(URL_FICHAS);
     const dados = await resposta.json();
 
-    if (dados.restantes > 0) {
-      texto.textContent = "Restam " + dados.restantes + " de " + dados.total + " fichas";
-    } else {
-      texto.textContent = "Fichas esgotadas por hoje";
-      document.getElementById("btn-ficha").disabled = true;
+    if (typeof dados.restantes !== "object") {
+      texto.textContent = "Script desatualizado: publique a nova versão no Apps Script.";
+      return;
     }
+
+    const linhas = [];
+    let totalRestante = 0;
+
+    SERVICOS_FICHA.forEach(function (servico) {
+      const restantes = dados.restantes[servico];
+      totalRestante += restantes;
+
+      if (restantes > 0) {
+        linhas.push(servico + ": restam " + restantes + " de " + dados.total);
+      } else {
+        linhas.push(servico + ": fichas esgotadas");
+      }
+
+      const opcao = document.querySelector('input[name="servico"][value="' + servico + '"]');
+      opcao.disabled = restantes === 0;
+      if (restantes === 0) {
+        opcao.checked = false;
+      }
+    });
+
+    texto.innerHTML = linhas.join("<br>");
+    document.getElementById("btn-ficha").disabled = totalRestante === 0;
   } catch (erro) {
     texto.textContent = "Não foi possível ver as vagas agora.";
   }
@@ -32,8 +55,8 @@ function mostrarResultado(dados) {
     "Olá, me chamo " + dados.nome +
     ", sou o número " + dados.numero +
     " na " + dados.servico.toLowerCase() + ".";
-    
-    document.getElementById("nome-ficha").textContent = dados.nome;
+
+  document.getElementById("nome-ficha").textContent = dados.nome;
   document.getElementById("numero-ficha").textContent = dados.numero;
   document.getElementById("servico-ficha").textContent = dados.servico;
   document.getElementById("link-whatsapp").href =
@@ -41,6 +64,26 @@ function mostrarResultado(dados) {
 
   document.getElementById("formulario-ficha").hidden = true;
   document.getElementById("resultado-ficha").hidden = false;
+}
+
+function novaFicha() {
+  localStorage.removeItem(chaveHoje());
+
+  document.getElementById("f-nome").value = "";
+  document.getElementById("f-telefone").value = "";
+  document.getElementById("f-matricula").value = "";
+
+  const marcado = document.querySelector('input[name="servico"]:checked');
+  if (marcado) {
+    marcado.checked = false;
+  }
+
+  document.getElementById("msg-ficha").textContent = "";
+  document.getElementById("resultado-ficha").hidden = true;
+  document.getElementById("formulario-ficha").hidden = false;
+  document.getElementById("btn-ficha").disabled = false;
+
+  carregarVagas();
 }
 
 async function pegarFicha() {
@@ -90,26 +133,6 @@ async function pegarFicha() {
   carregarVagas();
 }
 
-function novaFicha() {
-  localStorage.removeItem(chaveHoje());
-
-  document.getElementById("f-nome").value = "";
-  document.getElementById("f-telefone").value = "";
-  document.getElementById("f-matricula").value = "";
-
-  const marcado = document.querySelector('input[name="servico"]:checked');
-  if (marcado) {
-    marcado.checked = false;
-  }
-
-  document.getElementById("msg-ficha").textContent = "";
-  document.getElementById("resultado-ficha").hidden = true;
-  document.getElementById("formulario-ficha").hidden = false;
-  document.getElementById("btn-ficha").disabled = false;
-
-  carregarVagas();
-}
-
 // ----- Início: roda quando a página abre -----
 const dataAtual = new Date();
 const abertoHoje = MODO_TESTE ||
@@ -120,37 +143,8 @@ if (abertoHoje) {
   document.getElementById("btn-ficha").addEventListener("click", pegarFicha);
   document.getElementById("btn-outra").addEventListener("click", novaFicha);
 
-  async function carregarVagas() {
-  const texto = document.getElementById("vagas-texto");
-  try {
-    const resposta = await fetch(URL_FICHAS);
-    const dados = await resposta.json();
-    const linhas = [];
-    let totalRestante = 0;
-
-    ["Barbearia", "Manicure"].forEach(function (servico) {
-      const restantes = dados.restantes[servico];
-      totalRestante += restantes;
-
-      if (restantes > 0) {
-        linhas.push(servico + ": restam " + restantes + " de " + dados.total);
-      } else {
-        linhas.push(servico + ": fichas esgotadas");
-      }
-
-      const opcao = document.querySelector('input[name="servico"][value="' + servico + '"]');
-      opcao.disabled = restantes === 0;
-      if (restantes === 0) {
-        opcao.checked = false;
-      }
-    });
-
-    texto.innerHTML = linhas.join("<br>");
-    document.getElementById("btn-ficha").disabled = totalRestante === 0;
-  } catch (erro) {
-    texto.textContent = "Não foi possível ver as vagas agora.";
-  }
-}
+  carregarVagas();
+  setInterval(carregarVagas, 30000);
 
   const salva = localStorage.getItem(chaveHoje());
   if (salva) {
