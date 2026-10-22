@@ -1,6 +1,6 @@
 // ===== PREENCHA ESTES DOIS VALORES =====
 const URL_FICHAS = "https://script.google.com/macros/s/AKfycbzMwr98GDVdScBJjsu7-t5nitrgxj9eBEX20K4NfoPbkQnC4CjbJrJ0oJ6SEhdu_TXTyA/exec";
-const NUMERO_WHATSAPP = "Digite seu telefone"; // número que recebe as fichas (só dígitos)
+const NUMERO_WHATSAPP = "5571988144191"; // número que recebe as fichas (só dígitos)
 // ========================================
 
 // Mude para true só para testar em dias sem barbearia
