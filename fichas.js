@@ -1,6 +1,5 @@
 // ===== PREENCHA ESTES DOIS VALORES =====
-const URL_FICHAS = "
-https://script.google.com/macros/s/AKfycbzMwr98GDVdScBJjsu7-t5nitrgxj9eBEX20K4NfoPbkQnC4CjbJrJ0oJ6SEhdu_TXTyA/exec";
+const URL_FICHAS = "https://script.google.com/macros/s/AKfycbzMwr98GDVdScBJjsu7-t5nitrgxj9eBEX20K4NfoPbkQnC4CjbJrJ0oJ6SEhdu_TXTyA/exec";
 const NUMERO_WHATSAPP = "5571988144191"; // só dígitos
 // ========================================
 
